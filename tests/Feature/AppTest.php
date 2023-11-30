@@ -14,8 +14,9 @@ Class AppTest extends TestCase {
       $this->assertSame("Environmental", $app->category);
     }
     public function test_clicked_application_returns_correct_info () : void {
-      $response = resources.views."welcome.blade.php".applications[0].name;
-      $response->assertStatus("EcoExplorer");
+      $response = application[0];
+      $this->assertSame("EcoExplorer", $response->name);
+      $this->assertSame("Environmental" $response->category);
     }
   
     public function test_sort_returns_correct_order(): void {
@@ -34,9 +35,13 @@ Class AppTest extends TestCase {
       // Add more assertions based on your expected sorting order
   }
   
+      String[] $sortApps = applications.sort(app => app.category.toLowerCase().includes("Entertainment"));
+      $this->assertSame("MindMaze")
+    }
   
     public function test_filter_returns_correct_output(): void {
-      
+      String[] $filteredApps = applications.filter(app => app.category.toLowerCase().includes("Fitness"));
+      $this->assertSame("FitFusion", $filteredApps[0].name);
     }
   
     //Test to make sure that when you login as user@gmail.com : password
