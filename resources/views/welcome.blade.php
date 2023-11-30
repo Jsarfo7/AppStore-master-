@@ -185,7 +185,7 @@
     <div class="app-container" id="appContainer">
     </div>
 
-    div class="modal" id="appModal">
+    <div class="modal" id="appModal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2 id="modalAppName"></h2>
