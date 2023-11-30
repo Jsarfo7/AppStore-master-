@@ -19,7 +19,10 @@ class HomeController extends Controller
                 return view('dashboard');
             }
             else if($usertype=='admin') {
-                return view('admin.adminhome');
+                return view('admin.dashboard');
+            }
+            else if($usertype=='moderator') {
+                return view('moderator.dashboard');
             }
             else {
                 return redirect()->back();
@@ -27,7 +30,7 @@ class HomeController extends Controller
         }
     }
 
-    // public function post() {
-    //     return view("post");
-    // }
+    public function post() {
+        return view("post");
+    }
 }

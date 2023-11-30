@@ -121,6 +121,44 @@
         .app-card img {
             max-width: 100px; /* Adjust the size as needed */
             max-height: 100px; /* Adjust the size as needed */
+
+
+
+            .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
         }
     </style>
         
@@ -139,6 +177,7 @@
             <option value="Environmental">Environmental</option>
             <option value="Fitness">Fitness</option>
             <option value="Entertainment">Entertainment</option>
+            <option value="Gaming">Gaming</option>
         </select>
     </div>
 
@@ -146,54 +185,119 @@
     <div class="app-container" id="appContainer">
     </div>
 
+    div class="modal" id="appModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalAppName"></h2>
+        <p id="modalAppDescription"></p>
+        <p id="modalAppOrganization"></p>
+        <p id="modalAppPlatforms"></p>
+        <p id="modalAppLinks"></p>
+        <p id="modalAppPrice"></p>
+    </div>
+</div>
+
+
     <script>
+        // Array of applications
         const applications = [
             {
                 name: "EcoExplorer",
                 category: "Environmental",
                 description: " EcoExplorer is a must-have app for environmentally conscious individuals...",
                 image: "{{ asset('images/ecofriendlyappicon.jpg') }}",
+                organization: "EcoTech Inc.",
+                platforms: "iOS, Android",
+                links: "https://example.com/ecoexplorer",
+                price: "$4.99",
             },
             {
                 name: "FitFusion",
                 category: "Fitness",
-                description: " FitFusion is the ultimate fitness app that combines the best of various workout styles...",
+                description: "FitFusion is the ultimate fitness app that combines the best of various workout styles...",
                 image: "{{ asset('images/fitnessappicon.jpg') }}",
+                organization: "FitTech Solutions",
+                platforms: "iOS, Android",
+                links: "https://example.com/fitfusion",
+                price: "$5.99",
             },
             {
                 name: "MindMaze",
                 category: "Entertainment",
                 description: " MindMaze is a captivating and immersive puzzle adventure game...",
                 image: "{{ asset('images/puzzlegameicon.jpg') }}",
+                organization: "MindGaming Co.",
+                platforms: "iOS, Android",
+                links: "https://example.com/mindmaze",
+                price: "$2.99",
             },
-            // Add more applications here
+            {
+            name: "Subway Runner",
+                category: "Gaming",
+                description: " Subway Runner is a fun chasing game...",
+                image: "{{ asset('images/runnericon.png') }}",
+                organization: "FunZone Studios",
+                platforms: "Android",
+                links: "https://example.com/subwayrunner",
+                price: "$1.99",
+                
+         },
+            {
+            name: "Street Shooter",
+                category: "Gaming",
+                description: " Street shooter is a fun shooting game...",
+                image: "{{ asset('images/streetshootericon.png') }}",
+                organization: "ActionGames Inc.",
+                platforms: "iOS",
+                links: "https://example.com/streetshooter",
+                price: "$3.49",
+            },
+            {
+                name: "CalTrack",
+                category: "Fitness",
+                description: " CalTrack is the a great calorie counting fitness app that allows users to reach their weight goals...",
+                image: "{{ asset('images/caltrackicon.webp') }}",
+                organization: "HealthTech Labs",
+                platforms: "iOS, Android",
+                links: "https://example.com/caltrack",
+                price: "$3.99",
+            },
         ];
 
+      
+
         const appContainer = document.getElementById("appContainer");
+    function displayApplications(apps) {
+        
+        appContainer.innerHTML = "";
 
-        function displayApplications(apps) {
-            appContainer.innerHTML = "";
-            apps.forEach(app => {
-                appContainer.innerHTML += `
-                    <div class="app-card">
-                        <img src="${app.image}" alt="${app.name} Image">
-                        <h2 class="app-title">${app.name}</h2>
-                        <h3 class="app-subtitle">${app.category}</h3>
-                        <p class="app-description">${app.description}</p>
-                        <button class="app-button">Download</button>
-                    </div>
-                `;
-            });
-        }
+        apps.forEach(app => {
+            const appCard = document.createElement("div");
+            appCard.classList.add("app-card");
+            appCard.innerHTML = `
+                <img src="${app.image}" alt="${app.name} Image">
+                <h2 class="app-title">${app.name}</h2>
+                <h3 class="app-subtitle">${app.category}</h3>
+                <p class="app-description">${app.description}</p>
+                <button class="app-button" onclick="displayAppDetails(${JSON.stringify(app)})">View Details</button>
+            `;
+            appContainer.appendChild(appCard);
+        });
+    }
 
-        displayApplications(applications);
+    // Call displayApplications to initially display apps
+    displayApplications(applications);
 
+
+
+        // function to show app filter 
         function filterApps() {
             const searchInput = document.getElementById("searchInput").value.toLowerCase();
             const filteredApps = applications.filter(app => app.name.toLowerCase().includes(searchInput));
             displayApplications(filteredApps);
         }
 
+        // Function to filter apps by categgory
         function filterByCategory() {
             const selectedCategory = document.getElementById("categoryFilter").value;
             if (selectedCategory === "All") {
@@ -203,6 +307,34 @@
                 displayApplications(filteredApps);
             }
         }
+
+        
+
+        function displayAppDetails(app) {
+        const modalAppName = document.getElementById("modalAppName");
+        const modalAppDescription = document.getElementById("modalAppDescription");
+        const modalAppOrganization = document.getElementById("modalAppOrganization");
+        const modalAppPlatforms = document.getElementById("modalAppPlatforms");
+        const modalAppLinks = document.getElementById("modalAppLinks");
+        const modalAppPrice = document.getElementById("modalAppPrice");
+
+        modalAppName.textContent = app.name;
+        modalAppDescription.textContent = `Description: ${app.description}`;
+        modalAppOrganization.textContent = `Organization: ${app.organization || "N/A"}`;
+        modalAppPlatforms.textContent = `Compatible Platforms: ${app.platforms || "N/A"}`;
+        modalAppLinks.textContent = `External Links: ${app.links || "N/A"}`;
+        modalAppPrice.textContent = `Price: ${app.price || "Free"}`;
+
+        const modal = document.getElementById("appModal");
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("appModal");
+        modal.style.display = "none";
+    }
+
+   
     </script>
 
 

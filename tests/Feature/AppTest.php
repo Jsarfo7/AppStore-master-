@@ -19,8 +19,21 @@ Class AppTest extends TestCase {
     }
   
     public function test_sort_returns_correct_order(): void {
-    
-    }
+      
+      $applications = [
+          ['name' => 'App1', 'category' => 'Entertainment'],
+          ['name' => 'App2', 'category' => 'Other'],
+          // Add more applications as needed
+      ];
+  
+      // Call sorting function or method
+      $sortedApps = $this->sortApplications($applications);
+  
+      // Assert that the sorting is correct
+      $this->assertSame('App1', $sortedApps[0]['name']);
+      // Add more assertions based on your expected sorting order
+  }
+  
   
     public function test_filter_returns_correct_output(): void {
       
