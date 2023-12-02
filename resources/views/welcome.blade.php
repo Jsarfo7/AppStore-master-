@@ -121,6 +121,7 @@
         .app-card img {
             max-width: 100px; /* Adjust the size as needed */
             max-height: 100px; /* Adjust the size as needed */
+        }
 
 
 
@@ -144,9 +145,9 @@
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
-        }
+        } */
 
-        .close {
+         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
@@ -159,7 +160,7 @@
             text-decoration: none;
             cursor: pointer;
         }
-        }
+
     </style>
         
     </head>
@@ -169,6 +170,7 @@
         The Vault
     </header>
 
+    <!-- DIv for the search bar -->
     <div class="search-bar">
         <input id="searchInput" type="text" placeholder="Search..." oninput="filterApps()">
         <label for="categoryFilter">Filter by Category:</label>
@@ -185,16 +187,21 @@
     <div class="app-container" id="appContainer">
     </div>
 
-    <div class="modal" id="appModal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalAppName"></h2>
-        <p id="modalAppDescription"></p>
-        <p id="modalAppOrganization"></p>
-        <p id="modalAppPlatforms"></p>
-        <p id="modalAppLinks"></p>
-        <p id="modalAppPrice"></p>
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modal-title"></h2>
+    <div class="app-details">
+      <img id="modal-image" src="" alt="App Image">
+      <p id="modal-category"></p>
+      <p id="modal-description"></p>
+      <p id="modal-organization"></p>
+      <p id="modal-platforms"></p>
+      <p id="modal-links"></p>
+      <p id="modal-price"></p>
     </div>
+  </div>
 </div>
 
 
@@ -265,26 +272,63 @@
         ];
 
       
+// Code for the modal that pops up when an application is clicked
+// Get the modal element
+const modal = document.getElementById("myModal");
+// Get the <span> element that closes the modal
+const closeBtn = document.querySelector(".close");
 
-        const appContainer = document.getElementById("appContainer");
-    function displayApplications(apps) {
+// Updated displayModal function to populate modal with specific app details
+function displayModal(name, image, category, description, organization, platforms, links, price) {
+    const modalTitle = document.getElementById("modal-title");
+    const modalImage = document.getElementById("modal-image");
+    const modalCategory = document.getElementById("modal-category");
+    const modalDescription = document.getElementById("modal-description");
+    const modalOrganization = document.getElementById("modal-organization");
+    const modalPlatforms = document.getElementById("modal-platforms");
+    const modalLinks = document.getElementById("modal-links");
+    const modalPrice = document.getElementById("modal-price");
+
+    // Physically displays all of the given data into the modal card
+    modalTitle.textContent = name;
+    modalImage.src = image;
+    modalCategory.textContent = `Category: ${category}`;
+    modalDescription.textContent = `Description: ${description}`;
+    modalOrganization.textContent = `Organization: ${organization}`;
+    modalPlatforms.textContent = `Platforms: ${platforms}`;
+    modalLinks.textContent = `Links: ${links}`;
+    modalPrice.textContent = `Price: ${price}`;
+
+    modal.style.display = "block";
+}
+
+// Function to close the modal
+function closeModal() {
+    modal.style.display = "none";
+}
+
+// Event listener to close the modal when clicking on the close button
+closeBtn.addEventListener("click", closeModal);
+
+// Update onclick event in the displayApplications function
+// Updated displayApplications function to populate modal with app details
+function displayApplications(apps) {
+    const appContainer = document.getElementById("appContainer");
         
-        appContainer.innerHTML = "";
+    appContainer.innerHTML = "";
 
-        apps.forEach(app => {
-            const appCard = document.createElement("div");
-            appCard.classList.add("app-card");
-            appCard.innerHTML = `
-                <img src="${app.image}" alt="${app.name} Image">
-                <h2 class="app-title">${app.name}</h2>
-                <h3 class="app-subtitle">${app.category}</h3>
-                <p class="app-description">${app.description}</p>
-                <button class="app-button" onclick="displayAppDetails(${JSON.stringify(app)})">View Details</button>
-            `;
-            appContainer.appendChild(appCard);
-        });
-    }
-
+    apps.forEach(app => {
+        const appCard = document.createElement("div");
+        appCard.classList.add("app-card");
+        appCard.innerHTML = `
+            <img src="${app.image}" alt="${app.name} Image">
+            <h2 class="app-title">${app.name}</h2>
+            <h3 class="app-subtitle">${app.category}</h3>
+            <button class="app-button" onclick="displayModal('${app.name}', '${app.image}', '${app.category}', '${app.description}', '${app.organization}', '${app.platforms}', '${app.links}', '${app.price}')">View Details</button>
+        `;
+        appContainer.appendChild(appCard);
+    });
+}
     // Call displayApplications to initially display apps
     displayApplications(applications);
 
@@ -297,7 +341,7 @@
             displayApplications(filteredApps);
         }
 
-        // Function to filter apps by categgory
+        // Function to filter apps by category
         function filterByCategory() {
             const selectedCategory = document.getElementById("categoryFilter").value;
             if (selectedCategory === "All") {
@@ -307,33 +351,6 @@
                 displayApplications(filteredApps);
             }
         }
-
-        
-
-        function displayAppDetails(app) {
-        const modalAppName = document.getElementById("modalAppName");
-        const modalAppDescription = document.getElementById("modalAppDescription");
-        const modalAppOrganization = document.getElementById("modalAppOrganization");
-        const modalAppPlatforms = document.getElementById("modalAppPlatforms");
-        const modalAppLinks = document.getElementById("modalAppLinks");
-        const modalAppPrice = document.getElementById("modalAppPrice");
-
-        modalAppName.textContent = app.name;
-        modalAppDescription.textContent = `Description: ${app.description}`;
-        modalAppOrganization.textContent = `Organization: ${app.organization || "N/A"}`;
-        modalAppPlatforms.textContent = `Compatible Platforms: ${app.platforms || "N/A"}`;
-        modalAppLinks.textContent = `External Links: ${app.links || "N/A"}`;
-        modalAppPrice.textContent = `Price: ${app.price || "Free"}`;
-
-        const modal = document.getElementById("appModal");
-        modal.style.display = "block";
-    }
-
-    function closeModal() {
-        const modal = document.getElementById("appModal");
-        modal.style.display = "none";
-    }
-
    
     </script>
 

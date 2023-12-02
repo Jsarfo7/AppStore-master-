@@ -37,7 +37,7 @@ Class AppTest extends TestCase {
 
     // Assert that the sorting is correct
     $this->assertSame('App1', $applications[0]['name']);
-    // Add more assertions based on your expected sorting order
+    // Add more assertions based on sorting order
 }
   
 public function test_filter_returns_correct_output(): void {
@@ -54,7 +54,7 @@ public function test_filter_returns_correct_output(): void {
 
   // Assert that the filtered output is as expected
   $this->assertSame('FitFusion', $filteredApps[0]['name']);
-  // Add more assertions based on your expected filtered output
+  // Add more assertions based on filtered output
 }
 
   }
